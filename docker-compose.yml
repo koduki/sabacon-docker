@@ -1,0 +1,6 @@
+app:
+  image: koduki/sabacon-docker
+  ports:
+    - "8022:22"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
