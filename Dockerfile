@@ -46,6 +46,6 @@ RUN chmod a+x /run-apache2.sh
 ADD script /script
 RUN chmod a+x /script/*
 
-EXPOSE 80 22
+EXPOSE 22
 #CMD /run-apache2.sh
 CMD /usr/sbin/sshd -D
