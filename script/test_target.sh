@@ -3,21 +3,19 @@
 . $(cd $(dirname $0);pwd)/env.sh
 
 SENARIO=$1
-SUBMISSION_DIR=$2
-REPOS_URL="https://github.com/koduki/sabacon-test.git"
-RESULT_FILE=${WORK_DIR}/${SUBMISSION_DIR}/result.txt
 
-echo "START: clone test senario" &>> $RESULT_FILE
-git clone --depth 1 ${REPOS_URL} ${WORK_DIR}/sabacon-test &>> $RESULT_FILE
+echo "START: stress test" 
 
-echo "START: stress test" &>> $RESULT_FILE
-rm -rf ${WORK_DIR}/report &>> $RESULT_FILE
-/opt/gatling/bin/gatling.sh -sf ${WORK_DIR}/sabacon-test/simulations -s ${SENARIO} -rf ${WORK_DIR}/report &>> $RESULT_FILE
+rm -rf ${WORK_DIR}/report
+mkdir -p ${WORK_DIR}/report
 
-echo "START: archive report" &>> $RESULT_FILE
-cd ${WORK_DIR}/report/* &>> $RESULT_FILE
-tar cfz ${WORK_DIR}/report.tar.gz * &>> $RESULT_FILE
+docker run -it -v ${WORK_DIR}/report:/opt/gatling/results/ -e JAVA_OPTS="-DbaseUrl=http://192.168.99.100" koduki/sabacon-test /script/docker-entrypoint.sh ${SENARIO} 
 
-echo "END:" &>> $RESULT_FILE
+echo "START: archive report" 
+
+cd ${WORK_DIR}/report/* 
+tar cfz ${WORK_DIR}/report.tar.gz * 
+
+echo "END:"
 
 echo $?
