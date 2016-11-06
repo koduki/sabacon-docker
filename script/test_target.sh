@@ -3,13 +3,14 @@
 . $(cd $(dirname $0);pwd)/env.sh
 
 SENARIO=$1
+HOST=http://172.17.0.1/
 
 echo "START: stress test" 
 
 rm -rf ${WORK_DIR}/report
 mkdir -p ${WORK_DIR}/report
 
-docker run -it -v ${WORK_DIR}/report:/opt/gatling/results/ -e JAVA_OPTS="-DbaseUrl=http://192.168.99.100" koduki/sabacon-test /script/docker-entrypoint.sh ${SENARIO} 
+docker run -v ${WORK_DIR}/report:/opt/gatling/results/ -e JAVA_OPTS="-DbaseUrl=${HOST}" koduki/sabacon-test /script/docker-entrypoint.sh ${SENARIO} 
 
 echo "START: archive report" 
 
